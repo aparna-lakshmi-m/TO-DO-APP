@@ -1,22 +1,28 @@
 import React, { useState } from 'react';
-import { BrowserRouter as Router, Routes, Route, Link, Navigate  } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route, Link, Navigate, useNavigate } from 'react-router-dom';
 import TodoList from './components/TodoList';
 import Login from './components/Login';
 import './App.css';
-const App = () => {
-  
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
-   
 
-  const handleLogin = () => {
+const App = () => {
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [username, setUsername] = useState('');
+  const [todos, setTodos] = useState([]);
+
+  const handleLogin = (username) => {
     setIsLoggedIn(true);
+    setUsername(username);
   };
 
   const handleLogout = () => {
     setIsLoggedIn(false);
+    setUsername('');
+    setTodos([]);
   };
-  return(<Router>
-    <nav className="navbar">
+
+  return (
+    <Router>
+      <nav className="navbar">
         <ul className="nav-links">
           <li>
             <Link to="/" className="nav-link">Home</Link>
@@ -38,18 +44,19 @@ const App = () => {
         </ul>
       </nav>
 
-          <Routes>
-          <Route path="/" element={<Home />} />
-
-        <Route path="/login" element={<Login onLogin={handleLogin} />} />
+      <Routes>
+        <Route path="/" element={<Home />} />
+        <Route path="/login" element={<Login onLogin={handleLogin} setIsLoggedIn={setIsLoggedIn} setTodos={setTodos} />} />
         {isLoggedIn ? (
-          <Route path="/todos" element={<TodoList onLogout={handleLogout} />} />
+          <Route path="/todos" element={<TodoList username={username} />} />
         ) : (
           <Route path="*" element={<Navigate to="/login" />} />
         )}
       </Routes>
-    </Router>)
+    </Router>
+  );
 };
+
 const Home = () => {
   return (
     <div className="home-container">
@@ -64,4 +71,5 @@ const Home = () => {
     </div>
   );
 };
+
 export default App;

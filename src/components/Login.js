@@ -1,23 +1,37 @@
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 
-const Login = ({ onLogin, isLoggedIn }) => {
+const Login = ({ onLogin, setIsLoggedIn, setTodos }) => {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
+  const navigate = useNavigate();
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    // authentication logic 
-    if (username === 'user' && password === 'pass') {
-      onLogin();
-    } else {
-      setError('Invalid credentials. Please try again.');
+
+    try {
+      const response = await fetch('http://localhost:5000/login', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ username, password }),
+      });
+
+      if (response.ok) {
+        const data = await response.json();
+        setIsLoggedIn(true);
+        onLogin(username);
+        setTodos(data.todos);
+        navigate('/todos');
+      } else {
+        setError('Invalid credentials. Please try again.');
+      }
+    } catch (error) {
+      setError('An error occurred. Please try again.');
     }
   };
-
-  if (isLoggedIn) {
-    return <p>You are already logged in.</p>;
-  }
 
   return (
     <div className="login-form">

@@ -1,36 +1,73 @@
 import React, { useState, useEffect } from 'react';
 
-const TodoList = () => {
+const TodoList = ({ username }) => {
   const [todos, setTodos] = useState([]);
   const [todoInput, setTodoInput] = useState('');
 
-  // Load todos from local storage on component mount
   useEffect(() => {
-    const storedTodos = JSON.parse(localStorage.getItem('todos')) || [];
-    setTodos(storedTodos);
-  }, []);
+    const fetchTodos = async () => {
+      try {
+        const response = await fetch(`http://localhost:5000/todos?username=${username}`);
+        const data = await response.json();
+        setTodos(data);
+      } catch (error) {
+        console.error('Error fetching todos:', error);
+      }
+    };
 
-  // Function to handle form submission
-  const handleSubmit = (e) => {
+    fetchTodos();
+  }, [username]);
+
+  const handleSubmit = async (e) => {
     e.preventDefault();
     if (todoInput.trim() !== '') {
       const newTodo = {
-        id: todos.length + 1, 
+        id: Date.now(),
         title: todoInput,
         completed: false,
       };
-      const updatedTodos = [...todos, newTodo];
-      setTodos(updatedTodos);
-      setTodoInput('');
-      localStorage.setItem('todos', JSON.stringify(updatedTodos)); // Update local storage
+
+      try {
+        const response = await fetch('http://localhost:5000/todos', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({ username, todo: newTodo }),
+        });
+
+        if (response.ok) {
+          const data = await response.json();
+          setTodos(data);
+          setTodoInput('');
+        } else {
+          console.error('Error adding todo:', response.statusText);
+        }
+      } catch (error) {
+        console.error('Error adding todo:', error);
+      }
     }
   };
 
-  // Function to handle deletion of a todo
-  const handleDeleteTodo = (id) => {
-    const updatedTodos = todos.filter(todo => todo.id !== id);
-    setTodos(updatedTodos);
-    localStorage.setItem('todos', JSON.stringify(updatedTodos)); // Update local storage
+  const handleDeleteTodo = async (id) => {
+    try {
+      const response = await fetch(`http://localhost:5000/todos/${id}`, {
+        method: 'DELETE',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ username }),
+      });
+
+      if (response.ok) {
+        const data = await response.json();
+        setTodos(data);
+      } else {
+        console.error('Error deleting todo:', response.statusText);
+      }
+    } catch (error) {
+      console.error('Error deleting todo:', error);
+    }
   };
 
   return (
