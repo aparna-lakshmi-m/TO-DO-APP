@@ -1,24 +1,42 @@
-import React, { useState } from 'react';
-import { BrowserRouter as Router, Routes, Route, Link, Navigate, useNavigate } from 'react-router-dom';
-import TodoList from './components/TodoList';
-import Login from './components/Login';
+import React, { useState, useEffect } from 'react';
+import { BrowserRouter as Router, Routes, Route, Navigate, Link } from 'react-router-dom';
+import TodoList from './Routes/TodoList';
+import Login from './Routes/Login';
+import RoutesComponent from './Routes/RoutesComponent';
+
 import './App.css';
 
 const App = () => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [username, setUsername] = useState('');
   const [todos, setTodos] = useState([]);
+  const [checkingAuth, setCheckingAuth] = useState(true);
+
+  useEffect(() => {
+    const storedUsername = localStorage.getItem('username');
+    if (storedUsername) {
+      setUsername(storedUsername);
+      setIsLoggedIn(true);
+    }
+    setCheckingAuth(false);
+  }, []);
 
   const handleLogin = (username) => {
+    localStorage.setItem('username', username);
     setIsLoggedIn(true);
     setUsername(username);
   };
 
   const handleLogout = () => {
+    localStorage.removeItem('username');
     setIsLoggedIn(false);
     setUsername('');
     setTodos([]);
   };
+
+  if (checkingAuth) {
+    return <div>Loading...</div>;
+  }
 
   return (
     <Router>
@@ -44,32 +62,18 @@ const App = () => {
         </ul>
       </nav>
 
-      <Routes>
-        <Route path="/" element={<Home />} />
-        <Route path="/login" element={<Login onLogin={handleLogin} setIsLoggedIn={setIsLoggedIn} setTodos={setTodos} />} />
-        {isLoggedIn ? (
-          <Route path="/todos" element={<TodoList username={username} />} />
-        ) : (
-          <Route path="*" element={<Navigate to="/login" />} />
-        )}
-      </Routes>
+      <RoutesComponent
+          isLoggedIn={isLoggedIn}
+          setIsLoggedIn={setIsLoggedIn} // Pass setIsLoggedIn as a prop
+          username={username}
+          handleLogin={handleLogin}
+          setTodos={setTodos}
+        />
     </Router>
   );
 };
 
-const Home = () => {
-  return (
-    <div className="home-container">
-      <h1 className="home-title">Welcome to the Todo App</h1>
-      <div className="content">
-        <p className="welcome-message">Manage all your tasks with ease!</p>
-        <blockquote className="quote">
-          "The secret of getting ahead is getting started." - Mark Twain
-        </blockquote>
-        <p className="motivation">Yayy! Start organizing your tasks today.</p>
-      </div>
-    </div>
-  );
-};
+
+
 
 export default App;
