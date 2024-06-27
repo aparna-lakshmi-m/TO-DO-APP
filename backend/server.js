@@ -3,6 +3,8 @@ const cors = require('cors');
 const bodyParser = require('body-parser');
 const mongoose = require('mongoose');
 const dotenv = require('dotenv');
+const bcrypt = require('bcrypt');
+
 const User = require('./models/User');
 const Todo = require('./models/Todo');
 
@@ -32,12 +34,16 @@ app.post('/login', async (req, res) => {
     let user = await User.findOne({ username });
 
     if (!user) {
-      user = new User({ username, password });
+      const saltRounds = 10;
+      const hashedPassword = await bcrypt.hash(password, saltRounds);
+      user = new User({ username, password: hashedPassword });
       await user.save();
       return res.json({ message: 'User registered successfully', todos: [] });
     }
 
-    if (user.password === password) {
+    const isPasswordValid = await bcrypt.compare(password, user.password);
+
+    if (isPasswordValid) {
       const todos = await Todo.find({ userId: user._id });
       return res.json({ message: 'Login successful', todos });
     }
@@ -48,6 +54,7 @@ app.post('/login', async (req, res) => {
     return res.status(500).json({ message: 'Server error' });
   }
 });
+
 
 // Route to handle fetching todos for a user
 app.get('/todos', async (req, res) => {
