@@ -1,29 +1,11 @@
+// routes/todoRoutes.js
 const express = require('express');
-const cors = require('cors');
-const bodyParser = require('body-parser');
-const mongoose = require('mongoose');
-const dotenv = require('dotenv');
-const bcrypt = require('bcrypt');
+const router = express.Router();
+const Todo = require('../models/Todo');
+const User = require('../models/User');
 
-const User = require('./models/User');
-const Todo = require('./models/Todo');
-
-dotenv.config();
-
-const app = express();
-const PORT = process.env.PORT || 5000;
-
-app.use(cors());
-app.use(bodyParser.json());
-
-const MONGO_URL = "mongodb://0.0.0.0:27017/todoapp";
-
-mongoose.connect(MONGO_URL)
-  .then(() => console.log("Database connected successfully"))
-  .catch((error) => console.log("Database connection error:", error));
-
-// Route to handle user login/registration
-app.post('/login', async (req, res) => {
+// POST /login
+router.post('/login', async (req, res) => {
   const { username, password } = req.body;
 
   if (!username || !password) {
@@ -55,8 +37,8 @@ app.post('/login', async (req, res) => {
   }
 });
 
-// Route to handle fetching todos for a user
-app.get('/todos', async (req, res) => {
+// GET /todos
+router.get('/todos', async (req, res) => {
   const { username } = req.query;
 
   if (!username) {
@@ -78,12 +60,12 @@ app.get('/todos', async (req, res) => {
   }
 });
 
-// Route to handle adding a new todo
-app.post('/todos', async (req, res) => {
-  const { username, todoContent, dueDate, category } = req.body;
+// POST /todos
+router.post('/todos', async (req, res) => {
+  const { username, todoContent } = req.body;
 
-  if (!username || !todoContent || !dueDate || !category) {
-    return res.status(400).json({ message: 'Username, todo content, due date, and category are required' });
+  if (!username || !todoContent) {
+    return res.status(400).json({ message: 'Username and todo content are required' });
   }
 
   try {
@@ -95,10 +77,7 @@ app.post('/todos', async (req, res) => {
 
     const todo = new Todo({
       userId: user._id,
-      todoContent,
-      completed: false,
-      dueDate,
-      category
+      todoContent
     });
 
     await todo.save();
@@ -110,9 +89,8 @@ app.post('/todos', async (req, res) => {
   }
 });
 
-
-// Route to handle deleting a todo
-app.delete('/todos/:id', async (req, res) => {
+// DELETE /todos/:id
+router.delete('/todos/:id', async (req, res) => {
   const { username } = req.body;
   const { id } = req.params;
 
@@ -136,13 +114,13 @@ app.delete('/todos/:id', async (req, res) => {
   }
 });
 
-// Route to handle updating a todo
-app.put('/todos/:id', async (req, res) => {
-  const { username, todoContent, completed } = req.body;
+// PUT /todos/:id
+router.put('/todos/:id', async (req, res) => {
+  const { username, todoContent } = req.body;
   const { id } = req.params;
 
-  if (!username || (!todoContent && completed === undefined)) {
-    return res.status(400).json({ message: 'Username and either todo content or completion status are required' });
+  if (!username || !todoContent) {
+    return res.status(400).json({ message: 'Username and todo content are required' });
   }
 
   try {
@@ -158,9 +136,7 @@ app.put('/todos/:id', async (req, res) => {
       return res.status(404).json({ message: 'Todo not found' });
     }
 
-    if (todoContent !== undefined) todo.todoContent = todoContent;
-    if (completed !== undefined) todo.completed = completed;
-
+    todo.todoContent = todoContent;
     await todo.save();
     const todos = await Todo.find({ userId: user._id });
     return res.json(todos);
@@ -170,6 +146,4 @@ app.put('/todos/:id', async (req, res) => {
   }
 });
 
-app.listen(PORT, () => {
-  console.log(`Server is running on port ${PORT}`);
-});
+module.exports = router;

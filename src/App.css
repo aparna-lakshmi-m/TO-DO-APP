@@ -1,93 +1,127 @@
-/* Reset some default styles for better consistency */
-* {
+/* Reset and global styles */
+body, html {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
-}
-
-/* Basic styling for the body */
-body {
   font-family: Arial, sans-serif;
-  background-color: #f0f0f0;
-  margin: 0;
-  padding: 0;
+  background-color: #a28089;
+}
+button{
+  border-radius: 15px;
 }
 
-/* Styling for the navigation bar */
+/* App container for sidebar and main content */
+.app-container {
+  display: flex;
+
+}
+
+/* Sidebar (Navbar) 
 .navbar {
   background-color: #333;
   color: #fff;
-  padding: 10px;
+  width: 30%; /* Sidebar takes 30% width of screen 
+  height: 100%; /* Full height of viewport 
+  position: fixed; /* Fixed position so it stays visible 
+  left: 0;
+  top: 0;
+  overflow-y: auto; /* Allow vertical scrolling if content exceeds height 
+}*/
+.app-container {
+  display: flex;
+}
+
+/* Sidebar (Navbar) */
+.navbar {
+  background-color:#ae9098;
+  color: #fff;
+  position: fixed;
+  top: 0;
+  right: 0;
+  height: 100vh;
+  width: 15%; /* Reduced width of the sidebar */
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end; /* Align items to the right side */
+  padding: 20px;
+  box-sizing: border-box;
 }
 
 .nav-links {
   list-style-type: none;
+  padding: 0;
+  margin-top: auto; /* Push the links to the bottom */
   display: flex;
-  justify-content: center;
-  align-items: center;
+  flex-direction: column;
+  align-items: flex-end; /* Align items to the right side */
 }
 
 .nav-links li {
-  margin: 0 10px;
+  margin-bottom: 10px; /* Adjust spacing between items */
 }
 
 .nav-link {
-  color: inherit;
+  color: #fff;
   text-decoration: none;
 }
 
 .logout-btn {
-  color: inherit;
-  background: none;
+  background-color: #a28089;
+  color: white;
+  padding: 8px 16px;
   border: none;
   cursor: pointer;
-  padding: 5px 10px;
-  font-size: 14px;
-}
-.home-container {
-  text-align: center;
-  margin-top: 50px;
-  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-  color: #333;
+  border-radius: 4px;
 }
 
-.home-title {
-  font-size: 2.5rem;
-  margin-bottom: 20px;
+.logout-btn:hover {
+  background-color: #a28089;
 }
 
-.content {
-  max-width: 600px;
-  margin: 0 auto;
+/* Main content area */
+.main-content {
+  flex: 1;
+  padding: 20px;
+  margin-right: 21%; /* Ensure main content area doesn't overlap with sidebar and add space */
 }
 
-.welcome-message {
-  font-size: 1.2rem;
-  margin-bottom: 15px;
-}
 
-.quote {
-  font-style: italic;
-  margin: 20px 0;
-}
-
-.motivation {
-  font-weight: bold;
-}
 .login-form {
   max-width: 400px;
-  margin-top: 150px ;
+  margin-top: 150px;
   margin-left: 600px;
   padding: 20px;
-  background-color: #f9f9f9;
+  background-color: #ccc;
   border: 1px solid #ccc;
-  border-radius: 5px;
+  border-radius: 10px 10px 0 0; /* Top corners curved, bottom corners straight */
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  color: #8c1c1c;
+  font-weight: bold;
+  height: 300px;
 }
+
 
 .login-form h2 {
   text-align: center;
   margin-bottom: 20px;
+  color: #8c1c1c;
+  
+}
+.login-button {
+  background-color: #cccccc29;
+  color: #333; /* Button text color */
+  padding: 10px 20px;
+  font-weight: bold;
+  border: none; /* Remove border */
+  border-radius: 4px; /* Optional: Add rounded corners */
+  cursor: pointer; /* Change cursor on hover */
+  outline: none; /* Remove outline */
+  box-shadow: 0 0 10px rgba(229, 234, 245, 0.8); /* Glowing effect */
+  transition: box-shadow 0.3s ease-in-out; /* Smooth transition */
+}
+
+.login-button:hover {
+  box-shadow: 0 0 20px rgba(229, 234, 245, 1); /* Increase glow on hover */
 }
 
 .error-message {
@@ -110,11 +144,12 @@ input[type="password"] {
   margin-bottom: 15px;
   border: 1px solid #ccc;
   border-radius: 4px;
+  width:90%;
 }
 
 .submit-button {
   padding: 10px 15px;
-  background-color: #007bff;
+  background-color: #5ebec4;
   color: #fff;
   border: none;
   border-radius: 4px;
@@ -123,9 +158,8 @@ input[type="password"] {
 }
 
 .submit-button:hover {
-  background-color: #0056b3;
+  background-color: #5ebec4;
 }
-
 
 .todo-list {
   max-width: 600px;
@@ -146,6 +180,9 @@ h2 {
   justify-content: space-between;
   margin-bottom: 20px;
 }
+.todo-title{
+  color:#8c1c1c
+}
 
 .todo-input {
   flex: 1;
@@ -157,15 +194,16 @@ h2 {
 
 .add-todo-btn {
   padding: 10px 20px;
-  background-color: #28a745;
+  background-color: #a28089;
   color: #fff;
   border: none;
   border-radius: 4px;
   cursor: pointer;
+  margin-left: 97px;
 }
 
 .add-todo-btn:hover {
-  background-color: #218838;
+  background-color: #a28089;
 }
 
 .todos {
@@ -184,13 +222,13 @@ h2 {
 .todo-item h3 {
   flex: 1;
   margin: 0;
-  color: #333;
+  color: #8c1c1c;
 }
 
 .edit-input {
   flex: 1;
   padding: 10px;
-  border: 1px solid #007bff;
+  border: 1px solid #5ebec4;
   border-radius: 4px;
   margin-right: 10px;
 }
@@ -207,12 +245,12 @@ h2 {
 }
 
 .edit-btn {
-  background-color: #007bff;
+  background-color: #5ebec4;
   color: #fff;
 }
 
 .edit-btn:hover {
-  background-color: #0056b3;
+  background-color: #5ebec4;
 }
 
 .delete-btn {
@@ -225,24 +263,266 @@ h2 {
 }
 
 .save-btn {
-  background-color: #28a745;
+  background-color: #5EBEC4;
   color: #fff;
 }
 
 .save-btn:hover {
-  background-color: #218838;
+  background-color: #5EBEC4;
 }
 
 .cancel-btn {
-  background-color: #ffc107;
+  background-color: #c82333;
   color: #212529;
 }
 
 .cancel-btn:hover {
-  background-color: #e0a800;
+  background-color: #c82333;
 }
 
 .no-todos {
   text-align: center;
   color: #999;
+}
+
+/* Styles for filters and search input */
+.filters {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 1rem;
+}
+
+.filters button {
+  background-color: #5ebec4;
+  color: white;
+  border: none;
+  padding: 0.5rem 1rem;
+  margin: 0 0.5rem;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.filters button:hover {
+  background-color: #5ebec4;
+}
+
+.search-input {
+  display: block;
+  margin: 1rem auto;
+  padding: 0.5rem;
+  width: 80%;
+  max-width: 400px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+/* Styles for todo items with checkboxes */
+.todo-item h3 {
+  flex: 1;
+  margin: 0;
+  padding-left: 1rem;
+}
+
+.todo-checkbox {
+  margin-right: 10px;
+}
+
+.completed-todo {
+  text-decoration: line-through;
+  color: #999;
+}
+
+
+
+
+
+
+/* Modal styling */
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.modal {
+  background-color: #fff;
+  padding: 20px;
+  border-radius: 8px;
+  max-width: 500px;
+  width: 100%;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+}
+
+/* Form styling */
+.form {
+  display: flex;
+  flex-direction: column;
+}
+
+.form label {
+  margin-bottom: 5px;
+}
+
+.form input,
+.form select {
+  margin-bottom: 15px;
+  padding: 8px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+.create-btn {
+  padding: 10px;
+  border: none;
+  background-color: #5ebec4;
+  color: #fff;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.create-btn:hover {
+  background-color: #5ebec4;
+}
+
+
+
+
+
+/* Navbar styles */
+.navbar {
+  overflow: hidden;
+}
+
+.nav-links {
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+}
+
+.nav-links li {
+  margin-right: 10px;
+}
+
+.nav-link {
+  color: #fff;
+  text-decoration: none;
+  padding: 10px;
+  display: inline-block;
+}
+
+.nav-link:hover {
+  background-color: #555;
+}
+
+/* Dropdown styles */
+.dropdown {
+  position: relative;
+  display: inline-block;
+}
+
+.dropdown-content {
+  display: none;
+  position: absolute;
+  background-color: #f9f9f9;
+  min-width: 160px;
+  box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+  z-index: 1;
+}
+
+.dropdown-content a {
+  color: black;
+  padding: 12px 16px;
+  text-decoration: none;
+  display: block;
+}
+
+.dropdown:hover .dropdown-content {
+  display: block;
+}
+
+/* Additional styles */
+.username {
+  color: #fff;
+  font-weight: bold;
+  margin-right: 10px;
+}
+
+.logout-btn {
+  background-color: #c82333;
+  color: white;
+  padding: 8px 16px;
+  border: none;
+  cursor: pointer;
+  border-radius: 4px;
+}
+
+.logout-btn:hover {
+  background-color: #c82333;
+}
+/* Add this CSS to your stylesheet */
+.todo-checkbox {
+  width: 20px; /* Adjust size as needed */
+  height: 20px; /* Adjust size as needed */
+  border: 1px solid #ccc;
+  border-radius: 3px;
+  cursor: pointer;
+  vertical-align: middle;
+}
+
+.todo-checkbox:checked {
+  background-color: #5ebec4; /* Color when checkbox is checked */
+}
+/* styles.css */
+
+/* Delete Confirmation Modal */
+.confirm-delete-modal {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  right: auto;
+  bottom: auto;
+  margin-right: -50%;
+  transform: translate(-50%, -50%);
+  background-color: white;
+  padding: 20px;
+  border-radius: 8px;
+  max-width: 400px;
+  width: 90%;
+}
+
+.confirm-delete-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.75);
+}
+
+.modal-buttons {
+  display: flex;
+  justify-content: center;
+  margin-top: 20px;
+}
+
+.confirm-delete-btn,
+.cancel-delete-btn {
+  background-color: #d32f2f;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  padding: 8px 12px;
+  cursor: pointer;
+}
+
+.confirm-delete-btn:hover,
+.cancel-delete-btn:hover {
+  background-color: #b71c1c;
 }

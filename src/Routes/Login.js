@@ -68,7 +68,7 @@ const Login = ({ onLogin, setIsLoggedIn, setTodos }) => {
           <div>{formik.errors.password}</div>
         ) : null}
 
-        <button type="submit" disabled={formik.isSubmitting}>Login</button>
+        <button class="login-button" type="submit" disabled={formik.isSubmitting}>Login</button>
       </form>
     </div>
   );

@@ -1,12 +1,10 @@
-import React, { useState, useEffect } from 'react';
-import { BrowserRouter as Router, Routes, Route, Navigate, Link } from 'react-router-dom';
-import TodoList from './Routes/TodoList';
-import Login from './Routes/Login';
+import React, { useState, useEffect, useContext, createContext } from 'react';
+import { BrowserRouter as Router } from 'react-router-dom';
 import RoutesComponent from './Routes/RoutesComponent';
-
 import './App.css';
-
+const AppContext = createContext()
 const App = () => {
+  const test = "tesxt value"
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [username, setUsername] = useState('');
   const [todos, setTodos] = useState([]);
@@ -39,41 +37,29 @@ const App = () => {
   }
 
   return (
+      <AppContext.Provider value={{ isLoggedIn, setIsLoggedIn, username, handleLogin, handleLogout, todos, setTodos }}> 
     <Router>
-      <nav className="navbar">
-        <ul className="nav-links">
-          <li>
-            <Link to="/" className="nav-link">Home</Link>
-          </li>
-          {isLoggedIn ? (
-            <>
-              <li>
-                <Link to="/todos" className="nav-link">Todos</Link>
-              </li>
-              <li>
-                <button onClick={handleLogout} className="logout-btn">Logout</button>
-              </li>
-            </>
-          ) : (
-            <li>
-              <Link to="/login" className="nav-link">Login</Link>
-            </li>
-          )}
-        </ul>
-      </nav>
 
+      {isLoggedIn && (
+        <nav className="navbar">
+          <ul className="nav-links">
+            {/* Add your navbar items here if needed */}
+          </ul>
+          <div className="bottom-content">
+            <span className="username">{username}</span>
+            <button onClick={handleLogout} className="logout-btn">Logout</button>  
+          </div>
+        </nav>
+      )}
       <RoutesComponent
-          isLoggedIn={isLoggedIn}
-          setIsLoggedIn={setIsLoggedIn} // Pass setIsLoggedIn as a prop
-          username={username}
-          handleLogin={handleLogin}
-          setTodos={setTodos}
-        />
+        
+      />
+              
     </Router>
+    </AppContext.Provider>
   );
 };
 
-
-
-
 export default App;
+
+export {AppContext}
